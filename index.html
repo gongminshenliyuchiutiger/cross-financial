@@ -78,10 +78,10 @@
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
-        #scrollToTopBtn, #mascot { /* Mascot shares some styles with scroll to top */
+        #mascot { /* Mascot shares some styles with scroll to top */
             transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
         }
-        #scrollToTopBtn:hover, #mascot:hover {
+        #mascot:hover {
             transform: scale(1.1);
         }
         .resource-card {
@@ -127,10 +127,30 @@
         }
         .example-box {
             /* Default styles, will be overridden by step-specific colors */
-            border-left-width: 4px; 
+            border-left-width: 4px;
             flex-grow: 1; /* Allow example box to take remaining space if content is short */
             display: flex; /* For vertical alignment of content if needed */
             flex-direction: column; /* For vertical alignment of content */
+        }
+
+        /* Accordion Styles */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding-left: 1rem; /* Indent content */
+            padding-right: 1rem;
+        }
+        .accordion-content.open {
+            /* max-height will be set by JS, or use a large enough value like 2000px if content varies greatly */
+            padding-top: 0.75rem; /* py-3 */
+            padding-bottom: 0.75rem; /* py-3 */
+        }
+        .accordion-button svg.toggle-icon { /* Specifically target the toggle icon */
+            transition: transform 0.3s ease-in-out;
+        }
+        .accordion-button[aria-expanded="true"] svg.toggle-icon {
+            transform: rotate(90deg);
         }
     </style>
 </head>
@@ -146,6 +166,7 @@
             </a>
             <div class="hidden md:flex space-x-6">
                 <a href="#overview" class="hover:text-indigo-200 transition duration-150">課程概述</a>
+                <a href="#learning-framework" class="hover:text-indigo-200 transition duration-150">學習架構</a>
                 <a href="#design" class="hover:text-indigo-200 transition duration-150">課程設計</a>
                 <a href="#lesson-plan-guide" class="hover:text-indigo-200 transition duration-150">教案指引</a>
                 <a href="#resources" class="hover:text-indigo-200 transition duration-150">教學資源</a>
@@ -158,6 +179,7 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-indigo-800 pb-4 px-4">
             <a href="#overview" class="block py-2 hover:bg-indigo-700 px-2 rounded transition duration-150">課程概述</a>
+            <a href="#learning-framework" class="block py-2 hover:bg-indigo-700 px-2 rounded transition duration-150">學習架構</a>
             <a href="#design" class="block py-2 hover:bg-indigo-700 px-2 rounded transition duration-150">課程設計</a>
             <a href="#lesson-plan-guide" class="block py-2 hover:bg-indigo-700 px-2 rounded transition duration-150">教案指引</a>
             <a href="#resources" class="block py-2 hover:bg-indigo-700 px-2 rounded transition duration-150">教學資源</a>
@@ -186,7 +208,9 @@
                 <circle cx="50" cy="80" r="10" fill="#7c3aed" class="opacity-60 floating-icon" style="animation-delay: 1.5s; filter: url(#sofGlow);" />
                 <rect x="130" y="10" width="20" height="20" fill="#6366f1" class="opacity-50 floating-icon" style="animation-duration: 5s; transform-origin: center; animation-name: float-rotate;" />
             </svg>
-            <style> @keyframes float-rotate { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-15px) rotate(180deg); } } </style>
+            <style> @keyframes float-rotate { 0%, 100% { transform: translateY(0px) rotate(0deg); } 
+
+50% { transform: translateY(-15px) rotate(180deg); } } </style>
         </div>
         <div class="container mx-auto relative z-10 fade-in-section">
             <div class="max-w-3xl mx-auto text-center">
@@ -203,76 +227,444 @@
     <section id="overview" class="py-16 px-4 fade-in-section">
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">課程概述</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-xl shadow-lg p-6 card">
-                    <div class="flex items-center mb-4 rotate-icon-hover">
-                        <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="max-w-2xl mx-auto"> <!-- Centered the card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 card">
+                    <div class="flex items-center mb-6 rotate-icon-hover">
+                        <div class="bg-indigo-100 p-4 rounded-full mr-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">工作坊目標</h3>
+                        <h3 class="text-2xl font-semibold text-gray-800">工作坊目標</h3>
                     </div>
-                    <ul class="space-y-3 text-gray-600">
+                    <ul class="space-y-4 text-gray-700">
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0 pulsate-icon" style="animation-duration: 2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0 pulsate-icon" style="animation-duration: 2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>協助教師進行《金融基礎教育》的跨領域素養導向課程設計</span>
+                            <span class="text-lg">協助教師進行《金融基礎教育》的跨領域素養導向課程設計</span>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.2s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>理解跨領域教學的不同形式與整合深度</span>
+                            <span class="text-lg">理解跨領域教學的不同形式與整合深度</span>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.4s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.4s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>實作金融基礎教育跨領域課程設計</span>
+                            <span class="text-lg">實作金融基礎教育跨領域課程設計</span>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.6s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0 pulsate-icon" style="animation-duration: 2s; animation-delay: 0.6s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>提供實用教材範例與教學策略</span>
+                            <span class="text-lg">提供實用教材範例與教學策略</span>
                         </li>
                     </ul>
                 </div>
-                <div class="bg-white rounded-xl shadow-lg p-6 card">
-                    <div class="flex items-center mb-4 rotate-icon-hover">
-                        <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </div>
+        </div>
+    </section>
+
+    <!-- 金融基礎教育學習架構 -->
+    <section id="learning-framework" class="py-16 px-4 bg-sky-50 fade-in-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">金融基礎教育學習架構</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+                「金融基礎教育學習架構」旨在協助不同教育階段的學生，循序漸進地建立正確的金融知識、態度與技能。以下為各階段的教學重點與學習目標摘要：
+            </p>
+
+            <div class="space-y-6 max-w-4xl mx-auto">
+                <!-- 國小 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card">
+                    <button class="accordion-button w-full flex justify-between items-center p-5 sm:p-6 text-left bg-blue-100 hover:bg-blue-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400" aria-expanded="false" aria-controls="framework-elementary">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.998.998 0 01.056 1.942L4 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1v-2.051a.998.998 0 011.942-.056L12 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1v-2.051a.998.998 0 011.942-.056L18 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1V6.92a1 1 0 00-.394-.788l-7-3zM10 6a1 1 0 100-2 1 1 0 000 2z"/>
                             </svg>
+                            <span class="text-xl font-semibold text-blue-700">國小階段</span>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">核心主題 (113年金融基礎教育)</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 transform toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <div id="framework-elementary" class="accordion-content bg-white">
+                        <div class="divide-y divide-gray-200 px-2 sm:px-0">
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-blue-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    </svg>
+                                    1. 金錢規劃
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>儲蓄與消費</li>
+                                            <li>投資自己並創造價值</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>認同儲蓄為金錢規劃之本</li>
+                                            <li>知道金錢規劃時，應同時注意消費、儲蓄與公益的目標</li>
+                                            <li>能辨別「需要」與「想要」，做出適當的消費選擇</li>
+                                            <li>能正確記帳，並用於檢視消費行為</li>
+                                            <li>認同收入-儲蓄=支出的觀念</li>
+                                            <li>知道投資自己的重要性與方法</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-blue-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 4a2 2 0 00-2 2v4h16V6a2 2 0 00-2-2H4z" />
+                                      <path fill-rule="evenodd" d="M18 9H2c-1.105 0-2 .895-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2zM8 13a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm-4 0a1 1 0 011-1h2a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    2. 借貸與信用
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>借錢的原則與態度</li>
+                                            <li>信用及其價值</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>認同不輕易借錢及審慎預支零用錢</li>
+                                            <li>知道有借有還，再借不難的道理</li>
+                                            <li>能覺察日常生活中信用的重要性</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-blue-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v4.768l-2.043.817a1 1 0 00-.457 1.781l2.5 2.5a1 1 0 001.414 0l2.5-2.5a1 1 0 00-.457-1.781L11 9.768V5z" clip-rule="evenodd" />
+                                    </svg>
+                                    3. 風險與風險管理
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>風險及風險管理的方法</li>
+                                            <li>生活中的風險及保險</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>能覺察生活中的風險，並能提出管理方法</li>
+                                            <li>能說出與生活相關的保險名稱</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger-children">
-                        <div class="flex items-center bg-indigo-50 hover:bg-indigo-100 p-3 rounded-lg transition duration-200 transform hover:scale-105">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3 0H9m12-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <span class="font-medium text-indigo-800">金錢規劃</span>
+                </div>
+
+                <!-- 國中 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card">
+                    <button class="accordion-button w-full flex justify-between items-center p-5 sm:p-6 text-left bg-green-100 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400" aria-expanded="false" aria-controls="framework-junior">
+                         <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.998.998 0 01.056 1.942L4 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1v-2.051a.998.998 0 011.942-.056L12 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1v-2.051a.998.998 0 011.942-.056L18 11v3c0 1.105.895 2 2 2h1c.552 0 1-.448 1-1V6.92a1 1 0 00-.394-.788l-7-3zM10 6a1 1 0 100-2 1 1 0 000 2z" transform="scale(0.8) translate(2, 2)"/>
+                                <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7H5V5z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-xl font-semibold text-green-700">國中階段</span>
                         </div>
-                        <div class="flex items-center bg-blue-50 hover:bg-blue-100 p-3 rounded-lg transition duration-200 transform hover:scale-105" style="transition-delay: 50ms;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                            <span class="font-medium text-blue-800">信用與借貸</span>
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 transform toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <div id="framework-junior" class="accordion-content bg-white">
+                        <div class="divide-y divide-gray-200 px-2 sm:px-0">
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-green-600 mb-3 flex items-center">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    </svg>
+                                    1. 金錢規劃
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>消費行為</li>
+                                            <li>儲蓄計畫</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>認同量入為出的消費概念</li>
+                                            <li>能察覺廣告的陷阱及迷思</li>
+                                            <li>能規劃及執行短期金錢計劃</li>
+                                            <li>了解金錢規劃時，應同時注意消費、儲蓄及公益的目標</li>
+                                            <li>能比較不同的儲蓄及支付工具</li>
+                                            <li>知道應該為自己的金錢規劃負責任</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-green-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 4a2 2 0 00-2 2v4h16V6a2 2 0 00-2-2H4z" />
+                                      <path fill-rule="evenodd" d="M18 9H2c-1.105 0-2 .895-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2zM8 13a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm-4 0a1 1 0 011-1h2a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    2. 借貸與信用
+                                </h4>
+                                 <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>借錢的原則與態度</li>
+                                            <li>信用及其價值</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>認同不輕易借錢及準時還錢的重要性</li>
+                                            <li>了解信用卡與信用之關係</li>
+                                            <li>認同信用的價值</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-green-600 mb-3 flex items-center">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v4.768l-2.043.817a1 1 0 00-.457 1.781l2.5 2.5a1 1 0 001.414 0l2.5-2.5a1 1 0 00-.457-1.781L11 9.768V5z" clip-rule="evenodd" />
+                                    </svg>
+                                    3. 保險與風險管理
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>風險管理的方法</li>
+                                            <li>保險的基本概念</li>
+                                            <li>全民健保的重要性</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>知道風險管理的方法</li>
+                                            <li>知道互助是保險的基本特性</li>
+                                            <li>認同並珍惜全民健保資源</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-green-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                                    </svg>
+                                    4. 理財投資
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>投資風險</li>
+                                            <li>投資的原則與態度</li>
+                                            <li>認識金融機構</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>了解投資風險的特性</li>
+                                            <li>列舉數種投資工具</li>
+                                            <li>列舉數種合法金融機構</li>
+                                            <li>知道投資的原則與應有的態度</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center bg-green-50 hover:bg-green-100 p-3 rounded-lg transition duration-200 transform hover:scale-105" style="transition-delay: 100ms;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                            <span class="font-medium text-green-800">保險與風險管理</span>
+                    </div>
+                </div>
+
+                <!-- 高中/職 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card">
+                     <button class="accordion-button w-full flex justify-between items-center p-5 sm:p-6 text-left bg-purple-100 hover:bg-purple-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400" aria-expanded="false" aria-controls="framework-senior">
+                         <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-600 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-xl font-semibold text-purple-700">高中/職階段</span>
                         </div>
-                        <div class="flex items-center bg-purple-50 hover:bg-purple-100 p-3 rounded-lg transition duration-200 transform hover:scale-105" style="transition-delay: 150ms;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                            <span class="font-medium text-purple-800">理財投資</span>
-                        </div>
-                        <div class="flex items-center bg-pink-50 hover:bg-pink-100 p-3 rounded-lg transition duration-200 transform hover:scale-105" style="transition-delay: 200ms;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                            <span class="font-medium text-pink-800">金融消費保護</span>
-                        </div>
-                        <div class="flex items-center bg-teal-50 hover:bg-teal-100 p-3 rounded-lg transition duration-200 transform hover:scale-105" style="transition-delay: 250ms;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-700 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M3.25 15.75l6.165-4.526A2.25 2.25 0 0112 10.5h0a2.25 2.25 0 012.585.724L20.75 15.75M4.5 19.5h15a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 003 6v12a1.5 1.5 0 001.5 1.5z"/></svg>
-                            <span class="font-medium text-teal-800">洗錢防制</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 transform toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <div id="framework-senior" class="accordion-content bg-white">
+                         <div class="divide-y divide-gray-200 px-2 sm:px-0">
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    </svg>
+                                    1. 金錢規劃
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>消費行為</li>
+                                            <li>儲蓄計畫</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>能分析影響消費行為的因素</li>
+                                            <li>能規劃及執行中期的金錢計劃</li>
+                                            <li>進行金錢規劃時能兼顧消費、儲蓄及公益的財務目標</li>
+                                            <li>認同應該為自己的金錢規劃負責任</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 4a2 2 0 00-2 2v4h16V6a2 2 0 00-2-2H4z" />
+                                      <path fill-rule="evenodd" d="M18 9H2c-1.105 0-2 .895-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2zM8 13a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm-4 0a1 1 0 011-1h2a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    2. 借貸與金融信用
+                                </h4>
+                                 <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>個人金融信用的重要元素及重要性</li>
+                                            <li>貸款前的準備</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>知道金融機構評估個人金融信用的原則</li>
+                                            <li>認同借款之前要思考還款能力及規劃</li>
+                                            <li>知道貸款前的評估與規劃</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v4.768l-2.043.817a1 1 0 00-.457 1.781l2.5 2.5a1 1 0 001.414 0l2.5-2.5a1 1 0 00-.457-1.781L11 9.768V5z" clip-rule="evenodd" />
+                                    </svg>
+                                    3. 保險與風險管理
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>保險與風險的關聯</li>
+                                            <li>保險的種類及功能</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>知道保險的原則與風險的關聯</li>
+                                            <li>列舉基本保險的種類及其功能</li>
+                                            <li>能因應不同風險，選擇適當保險</li>
+                                            <li>探究珍惜保險資源的理由</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                                    </svg>
+                                    4. 理財投資
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>投資工具的概念與風險</li>
+                                            <li>投資前的準備</li>
+                                            <li>投資的原則與態度</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>了解基本投資工具及其風險</li>
+                                            <li>知道投資前應做的自我檢視</li>
+                                            <li>認同投資應有的原則與態度</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H4zM2 7a1 1 0 011-1h14a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z" clip-rule="evenodd" />
+                                    </svg>
+                                    5. 金融消費保護
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>金融消費保護的內涵</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>知道金融消費者的基本權益</li>
+                                            <li>知道金融消費者糾紛的申訴管道</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="py-4 px-1 sm:px-5">
+                                <h4 class="text-lg font-semibold text-purple-600 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm3.293 11.707a1 1 0 001.414 0L10 12.414l1.293 1.293a1 1 0 101.414-1.414L11.414 11l1.293-1.293a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414L8.586 11 7.293 12.293a1 1 0 000 1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                    6. 洗錢防制
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">教學重點：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>防制洗錢及打擊資恐的內涵</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-700 mb-1">學習目標：</h5>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-2">
+                                            <li>知道防制洗錢及打擊資恐基本概念</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -536,7 +928,7 @@
                                 熟悉金融基礎教育的學習架構內涵
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v11.494m0 0A7.5 7.5 0 1012 6.253zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </h3>
-                            <p class="text-gray-600">了解核心主題：金錢規劃、信用與借貸、保險與風險管理、理財投資、金融消費保護、洗錢防制</p>
+                            <p class="text-gray-600">參考<a href="#learning-framework" class="text-indigo-500 hover:text-indigo-700 underline">金融基礎教育學習架構</a>，了解各階段核心主題與學習目標。</p>
                         </div>
                         <div class="md:w-12 flex justify-center">
                             <div class="bg-indigo-600 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold shadow-lg text-lg transform hover:scale-110 transition-transform">1</div>
@@ -917,6 +1309,8 @@
     <section id="resources" class="py-16 px-4 bg-gray-50 fade-in-section">
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">113年金融基礎教育 教學資源</h2>
+            
+            <h3 class="text-2xl font-semibold text-center mb-8 text-gray-700">主題教材（手冊下載）</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
                 
                 <!-- 金錢規劃 -->
@@ -1105,7 +1499,8 @@
                     <p class="text-gray-600 text-sm mb-4">旨在教育學生認識金融消費權益，了解金融剝削與爭議處理機制，並培養防範金融詐騙的能力。</p>
                     
                     <div class="mt-4 mb-4 border-t pt-4 flex-grow">
-                        <h4 class="text-md font-semibold text-gray-700 mb-3">精華重點：</h4>
+                        <h4 class="text-md font-semibold text-gray-700 mb
+3">精華重點：</h4>
                         <ul class="space-y-2 text-sm text-gray-600 summary-list">
                             <li class="flex items-start">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
@@ -1178,6 +1573,111 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 教學影片 -->
+            <div class="mt-16"> 
+                <h3 class="text-2xl font-semibold text-center mb-8 text-gray-700">主題教材：教學影片</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+                    <!-- 國小 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #f59e0b;"> <!-- Amber color -->
+                        <div class="flex items-center mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-amber-700">理財成長記 (國小)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：借貸與信用</p>
+                        <div class="mt-auto">
+                             <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/EY3vyGMGIQ5As7n4a45irTkB3AfNSq7AodKtGWg7zNMSyw?e=viJSSG" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-amber-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-amber-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 國中 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #10b981; transition-delay: 50ms;"> <!-- Emerald color -->
+                        <div class="flex items-center mb-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-emerald-700">家的撲滿 (國中)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：理財投資</p>
+                        <div class="mt-auto">
+                            <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/EYPSnM886wVDq-_AMmOD-10B0d_JcHFcFYF1d3QPyqG6lA?e=b0ae8cc2" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-emerald-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-emerald-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+                     <!-- 國中 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #0ea5e9; transition-delay: 100ms;"> <!-- Sky color -->
+                        <div class="flex items-center mb-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-sky-700">支付的選擇 (國中)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：金錢規劃</p>
+                         <div class="mt-auto">
+                             <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/Ec4scKry43ZGta3OccuSwikBp3xDR6K47ohEbI3EhuqNhA?e=6X8kNO" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-sky-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-sky-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 高中 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #ef4444; transition-delay: 150ms;"> <!-- Red color -->
+                        <div class="flex items-center mb-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-red-700">曼尼特務 (高中)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：理財投資</p>
+                         <div class="mt-auto">
+                             <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/EQgvTHJPQgROs7TiAL1DhBQBvnqFCBD6_sfqoIEMIEgb0A?e=iaeee0" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-red-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-red-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+                     <!-- 高中 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #8b5cf6; transition-delay: 200ms;"> <!-- Violet color -->
+                        <div class="flex items-center mb-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-violet-700">夢想的起點 (高中)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：借貸與金融信用</p>
+                         <div class="mt-auto">
+                            <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/EfMVB9b5o0JBs964Q8lX54wBSeVboSkFH86Wy6dARiVsBQ?e=eoE2Nm" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-violet-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-violet-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+                     <!-- 高中 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg resource-card" style="border-left-color: #ec4899; transition-delay: 250ms;"> <!-- Pink color (from theme) -->
+                        <div class="flex items-center mb-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h4 class="text-xl font-bold text-pink-700">新手上路 (高中)</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">主題：保險與風險管理</p>
+                         <div class="mt-auto">
+                             <a href="https://fsctw.sharepoint.com/:v:/s/fscvideo.fsc.gov.tw/EZsf8_W0GExDllE7sxPyHYEB2qavEUH0iHOAqXkAMukatw?e=lvqeFv" target="_blank" rel="noopener noreferrer" class="resource-button block w-full bg-pink-500 text-white text-center px-4 py-2.5 rounded-lg hover:bg-pink-600 shadow hover:shadow-md">
+                                觀看影片
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1215,19 +1715,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Smooth Scrolling for Nav Links ---
-    document.querySelectorAll('nav a[href^="#"], #mobile-menu a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('nav a[href^="#"], #mobile-menu a[href^="#"], a[href="#learning-framework"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            if (href === "#") {
+            if (href === "#") { 
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 const targetElement = document.querySelector(href);
-                if (targetElement) {
+                if (targetElement && nav) {
                     e.preventDefault();
                     const navHeight = nav.offsetHeight;
                     const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                    const offsetPosition = elementPosition - navHeight - 24; // Increased spacing
+                    const offsetPosition = elementPosition - navHeight - 24; 
 
                     window.scrollTo({
                         top: offsetPosition,
@@ -1270,21 +1770,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- Footer Current Year ---
-    const currentYearSpan = document.getElementById('currentYear');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
-    }
-
     // --- Mascot & Scroll to Top ---
     const mascotElement = document.getElementById('mascot');
     function toggleScrollElementsVisibility() {
-        if (window.pageYOffset > 300) {
-            mascotElement?.classList.remove('opacity-0', 'visibility-hidden');
-            mascotElement?.classList.add('opacity-100', 'visibility-visible');
-        } else {
-            mascotElement?.classList.remove('opacity-100', 'visibility-visible');
-            mascotElement?.classList.add('opacity-0', 'visibility-hidden');
+        if (mascotElement) { 
+            if (window.pageYOffset > 300) {
+                mascotElement.classList.remove('opacity-0', 'visibility-hidden');
+                mascotElement.classList.add('opacity-100', 'visibility-visible');
+            } else {
+                mascotElement.classList.remove('opacity-100', 'visibility-visible');
+                mascotElement.classList.add('opacity-0', 'visibility-hidden');
+            }
         }
     }
 
@@ -1294,16 +1790,15 @@ document.addEventListener('DOMContentLoaded', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
-    toggleScrollElementsVisibility();
-
+    toggleScrollElementsVisibility(); 
 
     // --- Staggered animation for children elements ---
     function staggerChildrenAnimation(elements) {
         elements.forEach((el, index) => {
-            el.style.opacity = '0'; // Reset before re-animating
+            el.style.opacity = '0'; 
             el.style.transform = 'translateY(20px)';
             el.style.transitionDelay = `${index * 100}ms`; 
-            void el.offsetWidth; // Trigger reflow
+            void el.offsetWidth; 
             el.style.opacity = '1';
             el.style.transform = 'translateY(0)';
         });
@@ -1327,7 +1822,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fadeInSections.forEach(section => {
             sectionObserver.observe(section);
-             // Initialize stagger children elements to be hidden before animation
             const initialStaggerElements = section.querySelectorAll('.stagger-children > *');
             initialStaggerElements.forEach(el => {
                 el.style.opacity = '0';
@@ -1336,13 +1830,49 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     } else { 
         fadeInSections.forEach(section => {
-            section.classList.add('is-visible');
+            section.classList.add('is-visible'); 
             const staggerElements = section.querySelectorAll('.stagger-children > *');
             if (staggerElements.length > 0) {
-                staggerChildrenAnimation(staggerElements);
+                staggerChildrenAnimation(staggerElements); 
             }
         });
     }
+
+    // --- Accordion Functionality ---
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const contentId = button.getAttribute('aria-controls');
+            const content = document.getElementById(contentId);
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            // Close other open accordions in the same group (optional, if desired)
+            // const parentGroup = button.closest('.space-y-6'); // or similar parent
+            // if (parentGroup) {
+            //     parentGroup.querySelectorAll('.accordion-button[aria-expanded="true"]').forEach(otherButton => {
+            //         if (otherButton !== button) {
+            //             const otherContentId = otherButton.getAttribute('aria-controls');
+            //             const otherContent = document.getElementById(otherContentId);
+            //             otherButton.setAttribute('aria-expanded', 'false');
+            //             otherContent.classList.remove('open');
+            //             otherContent.style.maxHeight = null;
+            //         }
+            //     });
+            // }
+
+
+            if (isExpanded) {
+                button.setAttribute('aria-expanded', 'false');
+                content.classList.remove('open');
+                content.style.maxHeight = null; 
+            } else {
+                button.setAttribute('aria-expanded', 'true');
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+
 });
 </script>
 </body>
